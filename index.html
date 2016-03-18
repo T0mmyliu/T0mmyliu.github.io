@@ -1,0 +1,473 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TommyLiu's Blog">
+<meta property="og:url" content="http://lunzimaker.github.io/index.html">
+<meta property="og:site_name" content="TommyLiu's Blog">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TommyLiu's Blog">
+<meta name="twitter:description">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> TommyLiu's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">TommyLiu's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/19/MIT6-828-LAB2-保护模式，段机制，页机制/" itemprop="url">
+                  MIT6.828 LAB2 保护模式，段机制，页机制
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-03-19T02:00:43+08:00" content="2016-03-19">
+              2016-03-19
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在Lab2中 我们将要建立基本的保护模式下的内存管理机制，我们有必要先弄清楚保护模式下是如何管理内存的。</p>
+<p>##概述<br>80x86在保护模式下内存机制主要分为<strong>段机制</strong>和<strong>页机制</strong>，其中页机制是基于段机制的。</p>
+<p>关于一个内存管理机制，有两个大的方面我们需要关心，一个是<strong>如何寻址</strong>，另一个是<strong>如何确定权限（即实现所谓保护）</strong>。段机制和页机制都提供了一定的寻址功能，但是其中有一定的重复。JOS没有使用段机制中的寻址功能，所有寻址只和页机制有关。段机制和页机制共同决定权限。</p>
+<p>##段机制</p>
+<p>###概述：<br>通过段选择符（selector）从段描述符表中获得段描述符，再加上offset，可以映射得到linear address(线性地址)。<br><img src="http://img.blog.csdn.net/20160319001829672" alt="这里写图片描述"></p>
+<p>####段描述符：<br>Descriptor Table(段描述符表)是一个段描述符的数组，Segment Descriptor(段描述符)定义虚拟内存段的基本信息，如base，limit(从哪里开始，从哪里结束)，访问权限等。具体的段描述符信息如下图：<br><img src="http://img.blog.csdn.net/20160319002820481" alt="这里写图片描述"><br>由图可以看出，段描述符是一个64位长的符在JOS中我们通过inc/mmu.h下的<code>SEG</code>宏来快速定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#define SEG(type, base, lim, dpl) (struct Segdesc)			\</span><br><span class="line">&#123; ((lim) &gt;&gt; 12) &amp; 0xffff, (base) &amp; 0xffff, ((base) &gt;&gt; 16) &amp; 0xff,	\</span><br><span class="line">    type, 1, dpl, 1, (unsigned) (lim) &gt;&gt; 28, 0, 0, 1, 1,		\</span><br><span class="line">    (unsigned) (base) &gt;&gt; 24 &#125;</span><br></pre></td></tr></table></figure>
+<p>type：访问权限(可执行STA_X，可读STA_R，可写STA_W)<br>base：基地址，在JOS中所有段描述符的基地址都定义为0<br>lim：长度，都定义为0xFFFFFFFF<br>dpl : DESCRIPTOR PRIVILEGE LEVEL（描述符权限级别），在*nix系统中分为0-3（越低权限越高），0为kernel态，1-3为用户态。在JOS中定义了0(kernel态)和3(user态)（Linux也是这样定义的）。</p>
+<p>在kern/env.c中定义了<strong>段描述符表<code>gdc</code></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">struct Segdesc gdt[NCPU + 5] =</span><br><span class="line">&#123;</span><br><span class="line">	// 0x0 - unused (always faults -- for trapping NULL far pointers)</span><br><span class="line">	SEG_NULL,</span><br><span class="line"></span><br><span class="line">	// 0x8 - kernel code segment</span><br><span class="line">	[GD_KT &gt;&gt; 3] = SEG(STA_X | STA_R, 0x0, 0xffffffff, 0),</span><br><span class="line"></span><br><span class="line">	// 0x10 - kernel data segment</span><br><span class="line">	[GD_KD &gt;&gt; 3] = SEG(STA_W, 0x0, 0xffffffff, 0),</span><br><span class="line"></span><br><span class="line">	// 0x18 - user code segment</span><br><span class="line">	[GD_UT &gt;&gt; 3] = SEG(STA_X | STA_R, 0x0, 0xffffffff, 3),</span><br><span class="line"></span><br><span class="line">	// 0x20 - user data segment</span><br><span class="line">	[GD_UD &gt;&gt; 3] = SEG(STA_W, 0x0, 0xffffffff, 3),</span><br><span class="line"></span><br><span class="line">	// Per-CPU TSS descriptors (starting from GD_TSS0) are initialized</span><br><span class="line">	// in trap_init_percpu()</span><br><span class="line">	[GD_TSS0 &gt;&gt; 3] = SEG_NULL</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>####段选择符（selector）：<br><img src="http://img.blog.csdn.net/20160319004254109" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20160319004605036" alt="这里写图片描述"></p>
+<p>####<code>公式1：Linear Address=Base+Offset</code></p>
+<p>####由于段描述符定义的<code>base=0</code>，所以有</p>
+<p>####<code>公式2：Linear Address=Offset</code></p>
+<p>##页机制</p>
+<p>###概述：<br>页机制通过多层页表，把Linear Address映射到实际内存地址空间。</p>
+<p>####Linear Address：<br><img src="http://img.blog.csdn.net/20160319010352559" alt="这里写图片描述"></p>
+<p>线性地址（linear address）是一个32位长的数，DIR(10位长)是在第一层页表中的index，PAGE是在第二层页表中的index（10位长），OFFSET是在该页中的偏移量（12位长）。由此我们可以看出，第一层页表有1024项，第二层页表也有1024项，一个单独的页（one page）的大小时4K。</p>
+<p>具体的寻址方式见：<br><img src="http://img.blog.csdn.net/20160319010900471" alt="这里写图片描述"><br>其中CR3是一个寄存器，用来存放第一层页表（Page Directory）的基地址。</p>
+<p>总结：由于禁用了段机制的寻址功能（只用来做访问控制），实际用户和开发者使用的（虚拟）地址（virtual memory）即等于线性地址（Linear Address），再通过两层页表，最终映射到了物理地址（Physical Address）空间。</p>
+<p>##参考：<br>1.<a href="http://www.logix.cz/michal/doc/i386/chp05-00.htm" target="_blank" rel="external">Intel 80386 Programmer’s Reference Manual</a><br>2.<a href="http://guojing.me/linux-kernel-architecture/posts/segment-selector/" target="_blank" rel="external">GuoJing’s Blog/linux-kernel-architecture/segment-selector</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+  </section>
+
+  
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="" />
+          <p class="site-author-name" itemprop="name"></p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
