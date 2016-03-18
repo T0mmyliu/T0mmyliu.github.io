@@ -143,7 +143,7 @@
             
               <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -153,17 +153,17 @@
             
               <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
             
-            Tags
+            Über
           </a>
         </li>
       
@@ -206,8 +206,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/19/JOS lab1 boot 加载操作系统/" itemprop="url">
-                  Untitled
+                <a class="post-title-link" href="/2016/03/19/MIT6-828-LAB2-保护模式，段机制，页机制/" itemprop="url">
+                  MIT6.828 LAB2 保护模式，段机制，页机制
                 </a>
               
             
@@ -219,8 +219,8 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-03-19T06:22:06+08:00" content="2016-03-19">
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-03-19T02:00:43+08:00" content="2016-03-19">
               2016-03-19
             </time>
           </span>
@@ -249,52 +249,16 @@
       
         
           
-            <p>###MIT 6.828课程正式开始 :-D 撒花</p>
-<hr>
-<p>##Part 1：PC Bootstrap<br>这一部分主要介绍如何用qemu和gdb联调kernel :-D。<br>打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:<br><img src="http://img.blog.csdn.net/20160224082044678" alt="这里写图片描述"></p>
-<p>刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师故意这样做的。第一条指令是一个长跳转指令，这条指令是跳向BIOS的开头。你可以继续使用<strong>SI</strong> 命令继续逐条观察，这部分都是BIOS做的工作，大概是通过IO check 各种硬件(reference 里的手册真长)，比较的晦涩（以及无聊，所以我大概看了看就略过了…）。</p>
-<h2 id="Part-2-The-bootloader"><a href="#Part-2-The-bootloader" class="headerlink" title="Part 2: The bootloader"></a>Part 2: The bootloader</h2><p>BIOS做的最后一件事情是</p>
-<blockquote>
-<p>Eventually, when it finds a bootable disk, the BIOS reads the boot loader from the disk and transfers control to it.</p>
-</blockquote>
-<p>就是BIOS帮我们读了一个扇区（sector）的代码到0x7c00 这个地方，然后跳转到这个地方。这个扇区的代码就是JOS的bootloader。</p>
-<p>JOS的bootloader有两部分，先是一段汇编代码，在 boot/boot.S里面，然后是一个C源代码，在boot/main.c。</p>
-<hr>
-<p>我们依次来分析这两段代码。</p>
-<h4 id="boot-boot-S-从实模式到保护模式"><a href="#boot-boot-S-从实模式到保护模式" class="headerlink" title="boot/boot.S 从实模式到保护模式"></a>boot/boot.S 从实模式到保护模式</h4><p>正如boot.S里的注释第一句</p>
-<blockquote>
-<h4 id="Start-the-CPU-switch-to-32-bit-protected-mode-jump-into-C"><a href="#Start-the-CPU-switch-to-32-bit-protected-mode-jump-into-C" class="headerlink" title="Start the CPU: switch to 32-bit protected mode, jump into C."></a>Start the CPU: switch to 32-bit protected mode, jump into C.</h4></blockquote>
-<p>这段代码的功能就是从实模式切换到保护模式。<br>我们跳过前面的一些准备代码(tips：boot.S这段代码里有一段是A20的设置，跳过他。<br>)，直接看到48行左右，这才是<strong>关键</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lgdt    gdtdesc</span><br><span class="line">movl    %cr0, %eax</span><br><span class="line">orl     $CR0_PE_ON, %eax</span><br><span class="line">movl    %eax, %cr0</span><br></pre></td></tr></table></figure>
-<p>其中第一行代码是加载一个段描述符表，这是进入保护模式前必要的一步，因为保护模式的内存机制以段机制为基础（在加上页机制），具体可以参考我写的这篇：<a href="http://blog.csdn.net/poundssss/article/details/50927651" target="_blank" rel="external"> JOS Lab2 保护模式下的内存映射机制：段机制 页机制。
-</a><br>这里的gdtdesc定义在最后面</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gdt:</span><br><span class="line">  SEG_NULL				# null seg</span><br><span class="line">  SEG(STA_X|STA_R, 0x0, 0xffffffff)	# code seg</span><br><span class="line">  SEG(STA_W, 0x0, 0xffffffff)	        # data seg</span><br><span class="line"></span><br><span class="line">gdtdesc:</span><br><span class="line">  .word   0x17                            # sizeof(gdt) - 1</span><br><span class="line">  .long   gdt                             # address gdt</span><br></pre></td></tr></table></figure>
-<p>这是一个最简单版本的段描述符，仅仅把内存分为数据段（data seg）和代码段（code seg）。</p>
-<p>接下来三句代码，实现的功能就是实模式到保护模式。(其实就是改变了CR0寄存器里的一位，从0变成了1。)<br>关于CR0寄存器，<a href="https://en.wikipedia.org/wiki/Control_register" target="_blank" rel="external">自己去wiki看啦。</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl    %cr0, %eax</span><br><span class="line">orl     $CR0_PE_ON, %eax</span><br><span class="line">movl    %eax, %cr0</span><br></pre></td></tr></table></figure></p>
-<p>然后通过一个ljmp跳到了<strong>prtcseg</strong>这一段代码里</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">movw    $PROT_MODE_DSEG, %ax    # Our data segment selector</span><br><span class="line">movw    %ax, %ds                # -&gt; DS: Data Segment</span><br><span class="line">movw    %ax, %es                # -&gt; ES: Extra Segment</span><br><span class="line">movw    %ax, %fs                # -&gt; FS</span><br><span class="line">movw    %ax, %gs                # -&gt; GS</span><br><span class="line">movw    %ax, %ss                # -&gt; SS: Stack Segment</span><br></pre></td></tr></table></figure>
-<p>随便设了一些segment的base值，下一句代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">movl    $start, %esp</span><br></pre></td></tr></table></figure>
-<p><strong>这句代码很重要</strong>，这是进入保护模式之后第一个栈顶，<strong>$start</strong>的地址大概在<code>0x7c00</code> 后多一些，这个随便取的，在正式的设定之前，0-start 这段空间做为栈，应该足够了:-D。<br><strong>有了栈，我们可以调用函数了！</strong><br>于是下一句  <code>call bootmain</code>我们进入<strong>main.c</strong></p>
-<h4 id="boot-main-c-勤劳的搬运工"><a href="#boot-main-c-勤劳的搬运工" class="headerlink" title="boot/main.c 勤劳的搬运工"></a>boot/main.c 勤劳的搬运工</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define ELFHDR		((struct Elf *) 0x10000) // scratch space</span><br></pre></td></tr></table></figure>
-<p>首先定义了一个ELFHDR的量，ELF文件的头文件。ELF是一类文件格式的名称，我们的kernel就是ELF，后续还会有很多地方会用到这个ELF，所以你有必要搞明白他，越早越好-&gt;<a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format" target="_blank" rel="external">wiki是你的朋友。</a><br>反正这一段代码就是根据elf hear里的信息，一段一段的把kernel的代码搬运到内存，从0x10000（1M）(这里还是物理内存地址)开始。理解起来挺容易，中间的一个强制类型转换可能会引起困扰：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ph = (struct Proghdr *) ((uint8_t *) ELFHDR + ELFHDR-&gt;e_phoff);</span><br></pre></td></tr></table></figure>
-<p>其中的(uint8_t <em>)是为了让ELFHDR指针每+1增加1而不是32位指针默认的+4。<br>最后一行`    ((void (</em>)(void)) (ELFHDR-&gt;e_entry))();`在elfhdr中，定义了一个入口地址，call它，我们就开始运行kernel的第一行代码，从这里开始bootloader结束。</p>
-<h4 id="kern-entry-S-内核！内核！"><a href="#kern-entry-S-内核！内核！" class="headerlink" title="kern/entry.S 内核！内核！"></a>kern/entry.S 内核！内核！</h4><p>哈哈哈哈，我们从boot文件夹跳到了kern文件夹，这意味着，我们终于进入内核啦！撒花~</p>
-<p>冷静下来继续读代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">movl	$(RELOC(entry_pgdir)), %eax</span><br><span class="line">movl	%eax, %cr3</span><br><span class="line"># Turn on paging.</span><br><span class="line">movl	%cr0, %eax</span><br><span class="line">orl	$(CR0_PE|CR0_PG|CR0_WP), %eax</span><br><span class="line">movl	%eax, %cr0</span><br></pre></td></tr></table></figure>
-<p>由于虚拟内存机制还没建立(lab2做这事儿)，所以老师帮我们手写了4MB的页表，在<strong>kern/entrypgdir.c</strong>里面，大概功能就是把1M-5M这段物理地址同时映射到从0x10000和0xF0000000开始的高（虚拟）地址中（我们的内核将来就处于从这里开始的256M空间中。）把entry_pgdir加载到cr3寄存器（用来存放页表一级目录基地址的寄存器）。然后打开cr0的页机制（同时打开的还有wp，自己wiki cr0吧…）。</p>
-<blockquote>
-<p>Now paging is enabled, but we’re still running at a low EIP<br>    (why is this okay?).</p>
-</blockquote>
-<p>注释里这样问，为什么可以呢？因为…老师帮我们同时map了原来的地址和加上0xf0000000两段，也就是在虚拟内存里有2个4M空间（好绕口…我实在不知道怎么表述）。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">movl	$0x0,%ebp			# nuke frame pointer</span><br><span class="line"></span><br><span class="line"># Set the stack pointer</span><br><span class="line">movl	$(bootstacktop),%esp</span><br><span class="line"></span><br><span class="line"># now to C code</span><br><span class="line">call	i386_init</span><br></pre></td></tr></table></figure>
-<p>这里建立了虚拟地址下的栈基地址（随便定的啦…就定0好了）和栈顶地址<strong>bootstacktop</strong>。这里是建立了保护模式下（简单的）虚拟内存机制（lab2建立完整的）后的栈。于是我们可以调用函数啦，:-D。<br>于是我们就</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call	i386_init</span><br></pre></td></tr></table></figure>
-<p>开始初始化工作，基本就没有lab1什么事了，到lab4之前基本上都在完善i386_init里的内容，建立内存机制，建立进程（JOS里叫运行环境environment），建立多CPU啦啦啦~</p>
-<p>#-EOF</p>
+          在Lab2中 我们将要建立基本的保护模式下的内存管理机制，我们有必要先弄清楚保护模式下是如何管理内存的。
+概述80x86在保护模式下内存机制主要分为段机制和页机制，其中页机制是基于段机制的。
+关于一个内存管理机制，有两个大的方面我们需要关心，一个是如何寻址，另一个是如何确定权限（即实现所谓保护）。段机制和页机制都提供了一定的寻址功能，但是其中有一定的重复。JOS没有使用段机制中的寻址功能，所有寻址
+          ...
 
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/19/MIT6-828-LAB2-保护模式，段机制，页机制/#more" rel="contents">
+              Weiterlesen &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -338,8 +302,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/19/MIT6-828-LAB2-保护模式，段机制，页机制/" itemprop="url">
-                  MIT6.828 LAB2 保护模式，段机制，页机制
+                <a class="post-title-link" href="/2016/03/19/JOS lab1 boot 加载操作系统/" itemprop="url">
+                  MIT6.828 lab1 boot 加载操作系统
                 </a>
               
             
@@ -351,8 +315,8 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-03-19T02:00:43+08:00" content="2016-03-19">
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-03-19T01:00:43+08:00" content="2016-03-19">
               2016-03-19
             </time>
           </span>
@@ -381,25 +345,15 @@
       
         
           
-            <p>在Lab2中 我们将要建立基本的保护模式下的内存管理机制，我们有必要先弄清楚保护模式下是如何管理内存的。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>80x86在保护模式下内存机制主要分为<strong>段机制</strong>和<strong>页机制</strong>，其中页机制是基于段机制的。</p>
-<p>关于一个内存管理机制，有两个大的方面我们需要关心，一个是<strong>如何寻址</strong>，另一个是<strong>如何确定权限（即实现所谓保护）</strong>。段机制和页机制都提供了一定的寻址功能，但是其中有一定的重复。JOS没有使用段机制中的寻址功能，所有寻址只和页机制有关。段机制和页机制共同决定权限。</p>
-<h2 id="段机制"><a href="#段机制" class="headerlink" title="段机制"></a>段机制</h2><h3 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h3><p>通过段选择符（selector）从段描述符表中获得段描述符，再加上offset，可以映射得到linear address(线性地址)。<br><img src="http://img.blog.csdn.net/20160319001829672" alt="这里写图片描述"></p>
-<h4 id="段描述符："><a href="#段描述符：" class="headerlink" title="段描述符："></a>段描述符：</h4><p>Descriptor Table(段描述符表)是一个段描述符的数组，Segment Descriptor(段描述符)定义虚拟内存段的基本信息，如base，limit(从哪里开始，从哪里结束)，访问权限等。具体的段描述符信息如下图：<br><img src="http://img.blog.csdn.net/20160319002820481" alt="这里写图片描述"><br>由图可以看出，段描述符是一个64位长的符在JOS中我们通过inc/mmu.h下的<code>SEG</code>宏来快速定义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#define SEG(type, base, lim, dpl) (struct Segdesc)			\</span><br><span class="line">&#123; ((lim) &gt;&gt; 12) &amp; 0xffff, (base) &amp; 0xffff, ((base) &gt;&gt; 16) &amp; 0xff,	\</span><br><span class="line">    type, 1, dpl, 1, (unsigned) (lim) &gt;&gt; 28, 0, 0, 1, 1,		\</span><br><span class="line">    (unsigned) (base) &gt;&gt; 24 &#125;</span><br></pre></td></tr></table></figure>
-<p>type：访问权限(可执行STA_X，可读STA_R，可写STA_W)<br>base：基地址，在JOS中所有段描述符的基地址都定义为0<br>lim：长度，都定义为0xFFFFFFFF<br>dpl : DESCRIPTOR PRIVILEGE LEVEL（描述符权限级别），在*nix系统中分为0-3（越低权限越高），0为kernel态，1-3为用户态。在JOS中定义了0(kernel态)和3(user态)（Linux也是这样定义的）。</p>
-<p>在kern/env.c中定义了<strong>段描述符表<code>gdc</code></strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">struct Segdesc gdt[NCPU + 5] =</span><br><span class="line">&#123;</span><br><span class="line">	// 0x0 - unused (always faults -- for trapping NULL far pointers)</span><br><span class="line">	SEG_NULL,</span><br><span class="line"></span><br><span class="line">	// 0x8 - kernel code segment</span><br><span class="line">	[GD_KT &gt;&gt; 3] = SEG(STA_X | STA_R, 0x0, 0xffffffff, 0),</span><br><span class="line"></span><br><span class="line">	// 0x10 - kernel data segment</span><br><span class="line">	[GD_KD &gt;&gt; 3] = SEG(STA_W, 0x0, 0xffffffff, 0),</span><br><span class="line"></span><br><span class="line">	// 0x18 - user code segment</span><br><span class="line">	[GD_UT &gt;&gt; 3] = SEG(STA_X | STA_R, 0x0, 0xffffffff, 3),</span><br><span class="line"></span><br><span class="line">	// 0x20 - user data segment</span><br><span class="line">	[GD_UD &gt;&gt; 3] = SEG(STA_W, 0x0, 0xffffffff, 3),</span><br><span class="line"></span><br><span class="line">	// Per-CPU TSS descriptors (starting from GD_TSS0) are initialized</span><br><span class="line">	// in trap_init_percpu()</span><br><span class="line">	[GD_TSS0 &gt;&gt; 3] = SEG_NULL</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="段选择符（selector）："><a href="#段选择符（selector）：" class="headerlink" title="段选择符（selector）："></a>段选择符（selector）：</h4><p><img src="http://img.blog.csdn.net/20160319004254109" alt="这里写图片描述"><br><img src="http://img.blog.csdn.net/20160319004605036" alt="这里写图片描述"></p>
-<h4 id="寻址总结"><a href="#寻址总结" class="headerlink" title="寻址总结"></a>寻址总结</h4><p>段机制的寻址总的来说就是把虚拟地址（这里是offset映射到线性地址上）即 <code>Linear Address=Base+Offset</code>。由于段描述符定义的<code>base=0</code>，所以有：<code>Linear Address=Offset</code></p>
-<h2 id="页机制"><a href="#页机制" class="headerlink" title="页机制"></a>页机制</h2><h3 id="概述：-1"><a href="#概述：-1" class="headerlink" title="概述："></a>概述：</h3><p>页机制通过多层页表，把Linear Address映射到实际内存地址空间。</p>
-<h4 id="Linear-Address："><a href="#Linear-Address：" class="headerlink" title="Linear Address："></a>Linear Address：</h4><p><img src="http://img.blog.csdn.net/20160319010352559" alt="这里写图片描述"></p>
-<p>线性地址（linear address）是一个32位长的数，DIR(10位长)是在第一层页表中的index，PAGE是在第二层页表中的index（10位长），OFFSET是在该页中的偏移量（12位长）。由此我们可以看出，第一层页表有1024项，第二层页表也有1024项，一个单独的页（one page）的大小时4K。</p>
-<p>具体的寻址方式见：<br><img src="http://img.blog.csdn.net/20160319010900471" alt="这里写图片描述"><br>其中CR3是一个寄存器，用来存放第一层页表（Page Directory）的基地址。</p>
-<p>总结：由于禁用了段机制的寻址功能（只用来做访问控制），实际用户和开发者使用的（虚拟）地址（virtual memory）即等于线性地址（Linear Address），再通过两层页表，最终映射到了物理地址（Physical Address）空间。</p>
-<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><p>1.<a href="http://www.logix.cz/michal/doc/i386/chp05-00.htm" target="_blank" rel="external">Intel 80386 Programmer’s Reference Manual</a><br>2.<a href="http://guojing.me/linux-kernel-architecture/posts/segment-selector/" target="_blank" rel="external">GuoJing’s Blog/linux-kernel-architecture/segment-selector</a></p>
+          MIT 6.828课程正式开始 :-D 撒花Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
+刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师
+          ...
 
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/19/JOS lab1 boot 加载操作系统/#more" rel="contents">
+              Weiterlesen &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -464,12 +418,19 @@
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">2</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
           
 
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
           
 
         </nav>
@@ -513,7 +474,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

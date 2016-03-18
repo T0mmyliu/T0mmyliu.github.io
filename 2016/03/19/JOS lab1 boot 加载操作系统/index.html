@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="JOS," />
 
 
 
@@ -57,26 +57,20 @@
 
 
 
-<meta name="description" content="###MIT 6.828课程正式开始 :-D 撒花
-
-##Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
-刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，">
+<meta name="description" content="MIT 6.828课程正式开始 :-D 撒花Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
+刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TommyLiu's Blog">
+<meta property="og:title" content="MIT6.828 lab1 boot 加载操作系统">
 <meta property="og:url" content="http://lunzimaker.github.io/2016/03/19/JOS lab1 boot 加载操作系统/index.html">
 <meta property="og:site_name" content="TommyLiu's Blog">
-<meta property="og:description" content="###MIT 6.828课程正式开始 :-D 撒花
-
-##Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
-刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，">
+<meta property="og:description" content="MIT 6.828课程正式开始 :-D 撒花Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
+刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师">
 <meta property="og:image" content="http://img.blog.csdn.net/20160224082044678">
-<meta property="og:updated_time" content="2016-03-18T22:21:56.414Z">
+<meta property="og:updated_time" content="2016-03-18T22:25:33.210Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TommyLiu's Blog">
-<meta name="twitter:description" content="###MIT 6.828课程正式开始 :-D 撒花
-
-##Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
-刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，">
+<meta name="twitter:title" content="MIT6.828 lab1 boot 加载操作系统">
+<meta name="twitter:description" content="MIT 6.828课程正式开始 :-D 撒花Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
+刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20160224082044678">
 
 
@@ -95,7 +89,7 @@
   };
 </script>
 
-  <title>  | TommyLiu's Blog </title>
+  <title> MIT6.828 lab1 boot 加载操作系统 | TommyLiu's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -153,7 +147,7 @@
             
               <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -163,17 +157,17 @@
             
               <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
             
-            Tags
+            Über
           </a>
         </li>
       
@@ -215,7 +209,7 @@
             
             
               
-                
+                MIT6.828 lab1 boot 加载操作系统
               
             
           </h1>
@@ -226,8 +220,8 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-03-19T06:22:06+08:00" content="2016-03-19">
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-03-19T01:00:43+08:00" content="2016-03-19">
               2016-03-19
             </time>
           </span>
@@ -254,9 +248,7 @@
       
 
       
-        <p>###MIT 6.828课程正式开始 :-D 撒花</p>
-<hr>
-<p>##Part 1：PC Bootstrap<br>这一部分主要介绍如何用qemu和gdb联调kernel :-D。<br>打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:<br><img src="http://img.blog.csdn.net/20160224082044678" alt="这里写图片描述"></p>
+        <h3 id="MIT-6-828课程正式开始-D-撒花"><a href="#MIT-6-828课程正式开始-D-撒花" class="headerlink" title="MIT 6.828课程正式开始 :-D 撒花"></a>MIT 6.828课程正式开始 :-D 撒花</h3><h2 id="Part-1：PC-Bootstrap"><a href="#Part-1：PC-Bootstrap" class="headerlink" title="Part 1：PC Bootstrap"></a>Part 1：PC Bootstrap</h2><p>这一部分主要介绍如何用qemu和gdb联调kernel :-D。<br>打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:<br><img src="http://img.blog.csdn.net/20160224082044678" alt="这里写图片描述"></p>
 <p>刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师故意这样做的。第一条指令是一个长跳转指令，这条指令是跳向BIOS的开头。你可以继续使用<strong>SI</strong> 命令继续逐条观察，这部分都是BIOS做的工作，大概是通过IO check 各种硬件(reference 里的手册真长)，比较的晦涩（以及无聊，所以我大概看了看就略过了…）。</p>
 <h2 id="Part-2-The-bootloader"><a href="#Part-2-The-bootloader" class="headerlink" title="Part 2: The bootloader"></a>Part 2: The bootloader</h2><p>BIOS做的最后一件事情是</p>
 <blockquote>
@@ -264,7 +256,7 @@
 </blockquote>
 <p>就是BIOS帮我们读了一个扇区（sector）的代码到0x7c00 这个地方，然后跳转到这个地方。这个扇区的代码就是JOS的bootloader。</p>
 <p>JOS的bootloader有两部分，先是一段汇编代码，在 boot/boot.S里面，然后是一个C源代码，在boot/main.c。</p>
-<hr>
+<p>##</p>
 <p>我们依次来分析这两段代码。</p>
 <h4 id="boot-boot-S-从实模式到保护模式"><a href="#boot-boot-S-从实模式到保护模式" class="headerlink" title="boot/boot.S 从实模式到保护模式"></a>boot/boot.S 从实模式到保护模式</h4><p>正如boot.S里的注释第一句</p>
 <blockquote>
@@ -310,18 +302,24 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/JOS/" rel="tag">#JOS</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/19/MIT6-828-LAB2-保护模式，段机制，页机制/" rel="next" title="MIT6.828 LAB2 保护模式，段机制，页机制">
-                <i class="fa fa-chevron-left"></i> MIT6.828 LAB2 保护模式，段机制，页机制
-              </a>
-            
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/19/MIT6-828-LAB2-保护模式，段机制，页机制/" rel="prev" title="MIT6.828 LAB2 保护模式，段机制，页机制">
+                MIT6.828 LAB2 保护模式，段机制，页机制 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -370,10 +368,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
+            Übersicht
           </li>
         </ul>
       
@@ -390,12 +388,19 @@
           <div class="site-state-item site-state-posts">
             <a href="/archives">
               <span class="site-state-item-count">2</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
           
 
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
           
 
         </nav>
@@ -426,7 +431,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-2-The-bootloader"><span class="nav-number">1.</span> <span class="nav-text">Part 2: The bootloader</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#boot-boot-S-从实模式到保护模式"><span class="nav-number">1.0.1.</span> <span class="nav-text">boot/boot.S 从实模式到保护模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-the-CPU-switch-to-32-bit-protected-mode-jump-into-C"><span class="nav-number">1.0.2.</span> <span class="nav-text">Start the CPU: switch to 32-bit protected mode, jump into C.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#boot-main-c-勤劳的搬运工"><span class="nav-number">1.0.3.</span> <span class="nav-text">boot/main.c 勤劳的搬运工</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kern-entry-S-内核！内核！"><span class="nav-number">1.0.4.</span> <span class="nav-text">kern/entry.S 内核！内核！</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#MIT-6-828课程正式开始-D-撒花"><span class="nav-number">1.</span> <span class="nav-text">MIT 6.828课程正式开始 :-D 撒花</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-1：PC-Bootstrap"><span class="nav-number"></span> <span class="nav-text">Part 1：PC Bootstrap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-2-The-bootloader"><span class="nav-number"></span> <span class="nav-text">Part 2: The bootloader</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#boot-boot-S-从实模式到保护模式"><span class="nav-number">0.1.</span> <span class="nav-text">boot/boot.S 从实模式到保护模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-the-CPU-switch-to-32-bit-protected-mode-jump-into-C"><span class="nav-number">0.2.</span> <span class="nav-text">Start the CPU: switch to 32-bit protected mode, jump into C.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#boot-main-c-勤劳的搬运工"><span class="nav-number">0.3.</span> <span class="nav-text">boot/main.c 勤劳的搬运工</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kern-entry-S-内核！内核！"><span class="nav-number">0.4.</span> <span class="nav-text">kern/entry.S 内核！内核！</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -456,7 +461,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
