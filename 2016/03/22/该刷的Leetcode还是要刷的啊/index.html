@@ -60,7 +60,9 @@
 <meta name="description" content="今天在电群3-100参加携程的笔试，结果一道排序题当时没想出来(想错了)结果回来看了看，是Leetcode上一道Medium难度的题: “largest number”
 充分说明了一个道理，该刷的Leetcode还是要刷的啊。
 
-长期更新…无聊内容请绕过 :-DEOF 3/22/2016">
+无聊预警 长期更新…
+ “75. Sort Colors” 题目说，数组里有0，1，2三种数，排序。和discuss里的答案思路差不多。O(N)复杂度。
+void sor">
 <meta property="og:type" content="article">
 <meta property="og:title" content="该刷的Leetcode还是要刷的啊">
 <meta property="og:url" content="http://lunzimaker.github.io/2016/03/22/该刷的Leetcode还是要刷的啊/index.html">
@@ -68,14 +70,18 @@
 <meta property="og:description" content="今天在电群3-100参加携程的笔试，结果一道排序题当时没想出来(想错了)结果回来看了看，是Leetcode上一道Medium难度的题: “largest number”
 充分说明了一个道理，该刷的Leetcode还是要刷的啊。
 
-长期更新…无聊内容请绕过 :-DEOF 3/22/2016">
-<meta property="og:updated_time" content="2016-03-21T16:20:04.866Z">
+无聊预警 长期更新…
+ “75. Sort Colors” 题目说，数组里有0，1，2三种数，排序。和discuss里的答案思路差不多。O(N)复杂度。
+void sor">
+<meta property="og:updated_time" content="2016-03-22T01:03:53.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="该刷的Leetcode还是要刷的啊">
 <meta name="twitter:description" content="今天在电群3-100参加携程的笔试，结果一道排序题当时没想出来(想错了)结果回来看了看，是Leetcode上一道Medium难度的题: “largest number”
 充分说明了一个道理，该刷的Leetcode还是要刷的啊。
 
-长期更新…无聊内容请绕过 :-DEOF 3/22/2016">
+无聊预警 长期更新…
+ “75. Sort Colors” 题目说，数组里有0，1，2三种数，排序。和discuss里的答案思路差不多。O(N)复杂度。
+void sor">
 
 
 
@@ -282,7 +288,65 @@
         <p>今天在电群3-100参加携程的笔试，结果一道排序题当时没想出来(想错了)结果回来看了看，是Leetcode上一道Medium难度的题:<a href="https://leetcode.com/problems/largest-number/" target="_blank" rel="external"> “largest number”</a></p>
 <p><strong>充分说明了一个道理，该刷的Leetcode还是要刷的啊。</strong></p>
 <hr>
-<h3 id="长期更新…无聊内容请绕过-D"><a href="#长期更新…无聊内容请绕过-D" class="headerlink" title="长期更新…无聊内容请绕过 :-D"></a>长期更新…无聊内容请绕过 :-D</h3><h6 id="EOF-3-22-2016"><a href="#EOF-3-22-2016" class="headerlink" title="EOF 3/22/2016"></a>EOF 3/22/2016</h6>
+<h4 id="无聊预警-长期更新…"><a href="#无聊预警-长期更新…" class="headerlink" title="无聊预警 长期更新…"></a>无聊预警 长期更新…</h4><hr>
+<h4 id="“75-Sort-Colors”"><a href="#“75-Sort-Colors”" class="headerlink" title=" “75. Sort Colors”"></a><a href="https://leetcode.com/problems/sort-colors/" target="_blank" rel="external"> “75. Sort Colors”</a></h4><p> </p>题目说，数组里有0，1，2三种数，排序。<br>和<a href="https://leetcode.com/discuss/17000/share-my-one-pass-constant-space-10-line-solution" target="_blank" rel="external">discuss</a>里的答案思路差不多。O(N)复杂度。<p></p>
+<pre><code>void sortColors(vector&lt;int&gt;&amp; nums) {
+    int zero=0,two=nums.size()-1,index=0;
+    while(index&lt;=two)
+    {
+        if(nums[index]==0){
+            swap(nums[zero++],nums[index]);
+            //to ensure the index is greater than the boundary of zeros found.
+            index=index&gt;zero?index:zero;
+        }
+        else if(nums[index]==1) index++;
+        else if(nums[index]==2) swap(nums[two--],nums[index]);
+    }
+}
+</code></pre><hr>
+<p>####<a href="https://leetcode.com/problems/sort-list/" target="_blank" rel="external">“148 Sort List”</a></p>
+<p>链表形式的归并排序。</p>
+<pre><code>    ListNode* sortList(ListNode* head) {
+    ListNode* p=head;
+    while(p&amp;&amp;p-&gt;next) p=p-&gt;next;
+    ListNode* sortedList=sortList(head,p);
+    return sortedList;
+}
+
+ListNode* sortList(ListNode* head,ListNode* end){
+    if(head==end) return head;
+
+    ListNode* p=head,* q=head-&gt;next;
+    while(q&amp;&amp;q-&gt;next) {
+        p=p-&gt;next,q=q-&gt;next;
+        if(q!=NULL) q=q-&gt;next;
+    }
+    ListNode* mid=p-&gt;next;
+    p-&gt;next=NULL;
+    ListNode* h1=sortList(head,p);
+    ListNode* h2=sortList(mid,end);
+
+    p=h1,q=h2;
+    ListNode* preHead=new ListNode(0),* cur=preHead;
+    while(p&amp;&amp;q){
+        if(p-&gt;val&lt;q-&gt;val){
+            cur-&gt;next=p;
+            p=p-&gt;next;
+            cur=cur-&gt;next;
+        }
+        else{
+            cur-&gt;next=q;
+            q=q-&gt;next;
+            cur=cur-&gt;next;
+        }
+    }
+    if(p==NULL) cur-&gt;next=q;
+    else if(q==NULL) cur-&gt;next=p;
+    ListNode* ret=preHead-&gt;next;
+    delete preHead;
+    return ret;
+}
+</code></pre><h6 id="EOF-3-22-2016"><a href="#EOF-3-22-2016" class="headerlink" title="EOF 3/22/2016"></a>EOF 3/22/2016</h6>
       
     </div>
 
@@ -465,7 +529,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#长期更新…无聊内容请绕过-D"><span class="nav-number">1.</span> <span class="nav-text">长期更新…无聊内容请绕过 :-D</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#EOF-3-22-2016"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">EOF 3/22/2016</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#无聊预警-长期更新…"><span class="nav-number">1.</span> <span class="nav-text">无聊预警 长期更新…</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#“75-Sort-Colors”"><span class="nav-number">2.</span> <span class="nav-text"> “75. Sort Colors”</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#EOF-3-22-2016"><span class="nav-number">2.0.1.</span> <span class="nav-text">EOF 3/22/2016</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
