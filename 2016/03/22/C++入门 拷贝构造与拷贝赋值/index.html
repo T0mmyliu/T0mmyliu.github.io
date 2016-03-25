@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JOS," />
+  <meta name="keywords" content="不会使用C++," />
 
 
 
@@ -57,21 +57,34 @@
 
 
 
-<meta name="description" content="MIT 6.828课程正式开始 :-D 撒花Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
-刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师">
+<meta name="description" content="拷贝构造函数1.什么是拷贝构造函数？什么时候使用拷贝构造函数？第一个参数为自身类型引用的构造函数。比如
+123456class Foo&amp;#123;	public:	Foo();                   //默认构造函数	Foo(const Foo&amp;amp;);         //拷贝构造函数	//...&amp;#125;;
+在以下情况中被使用：
+
+拷贝初始化(用=定义变量)
+
+1Foo b">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MIT6.828 LAB1 bootloader 加载操作系统">
-<meta property="og:url" content="http://lunzimaker.github.io/2016/03/19/JOS lab1 boot 加载操作系统/index.html">
+<meta property="og:title" content="C++入门系列：拷贝构造函数 拷贝赋值函数">
+<meta property="og:url" content="http://lunzimaker.github.io/2016/03/22/C++入门 拷贝构造与拷贝赋值/index.html">
 <meta property="og:site_name" content="TommyLiu's Blog">
-<meta property="og:description" content="MIT 6.828课程正式开始 :-D 撒花Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
-刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师">
-<meta property="og:image" content="http://img.blog.csdn.net/20160224082044678">
-<meta property="og:updated_time" content="2016-03-19T04:45:43.669Z">
+<meta property="og:description" content="拷贝构造函数1.什么是拷贝构造函数？什么时候使用拷贝构造函数？第一个参数为自身类型引用的构造函数。比如
+123456class Foo&amp;#123;	public:	Foo();                   //默认构造函数	Foo(const Foo&amp;amp;);         //拷贝构造函数	//...&amp;#125;;
+在以下情况中被使用：
+
+拷贝初始化(用=定义变量)
+
+1Foo b">
+<meta property="og:updated_time" content="2016-03-25T10:42:34.690Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MIT6.828 LAB1 bootloader 加载操作系统">
-<meta name="twitter:description" content="MIT 6.828课程正式开始 :-D 撒花Part 1：PC Bootstrap这一部分主要介绍如何用qemu和gdb联调kernel :-D。打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:
-刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160224082044678">
+<meta name="twitter:title" content="C++入门系列：拷贝构造函数 拷贝赋值函数">
+<meta name="twitter:description" content="拷贝构造函数1.什么是拷贝构造函数？什么时候使用拷贝构造函数？第一个参数为自身类型引用的构造函数。比如
+123456class Foo&amp;#123;	public:	Foo();                   //默认构造函数	Foo(const Foo&amp;amp;);         //拷贝构造函数	//...&amp;#125;;
+在以下情况中被使用：
+
+拷贝初始化(用=定义变量)
+
+1Foo b">
 
 
 
@@ -89,7 +102,7 @@
   };
 </script>
 
-  <title> MIT6.828 LAB1 bootloader 加载操作系统 | TommyLiu's Blog </title>
+  <title> C++入门系列：拷贝构造函数 拷贝赋值函数 | TommyLiu's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -229,7 +242,7 @@
             
             
               
-                MIT6.828 LAB1 bootloader 加载操作系统
+                C++入门系列：拷贝构造函数 拷贝赋值函数
               
             
           </h1>
@@ -241,8 +254,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-19T01:00:43+08:00" content="2016-03-19">
-              2016-03-19
+            <time itemprop="dateCreated" datetime="2016-03-22T13:11:18+08:00" content="2016-03-22">
+              2016-03-22
             </time>
           </span>
 
@@ -252,8 +265,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/19/JOS lab1 boot 加载操作系统/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/03/19/JOS lab1 boot 加载操作系统/" itemprop="commentsCount"></span>
+                <a href="/2016/03/22/C++入门 拷贝构造与拷贝赋值/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/03/22/C++入门 拷贝构造与拷贝赋值/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -275,49 +288,30 @@
       
 
       
-        <h3 id="MIT-6-828课程正式开始-D-撒花"><a href="#MIT-6-828课程正式开始-D-撒花" class="headerlink" title="MIT 6.828课程正式开始 :-D 撒花"></a>MIT 6.828课程正式开始 :-D 撒花</h3><h2 id="Part-1：PC-Bootstrap"><a href="#Part-1：PC-Bootstrap" class="headerlink" title="Part 1：PC Bootstrap"></a>Part 1：PC Bootstrap</h2><p>这一部分主要介绍如何用qemu和gdb联调kernel :-D。<br>打开两个terminal，都进入到lab目录，然后其中一个输入make qemu-gdb，另一个输入make gdb，即可，你可以看到下面的画面:<br><img src="http://img.blog.csdn.net/20160224082044678" alt="这里写图片描述"></p>
-<p>刚启动时，计算机处于实模式。可以看到，当机器刚上电时候，此时PC指向的地址是0xffff0，这是硬件工程师故意这样做的。第一条指令是一个长跳转指令，这条指令是跳向BIOS的开头。你可以继续使用<strong>SI</strong> 命令继续逐条观察，这部分都是BIOS做的工作，大概是通过IO check 各种硬件(reference 里的手册真长)，比较的晦涩（以及无聊，所以我大概看了看就略过了…）。</p>
-<h2 id="Part-2-The-bootloader"><a href="#Part-2-The-bootloader" class="headerlink" title="Part 2: The bootloader"></a>Part 2: The bootloader</h2><p>BIOS做的最后一件事情是</p>
-<blockquote>
-<p>Eventually, when it finds a bootable disk, the BIOS reads the boot loader from the disk and transfers control to it.</p>
-</blockquote>
-<p>就是BIOS帮我们读了一个扇区（sector）的代码到0x7c00 这个地方，然后跳转到这个地方。这个扇区的代码就是JOS的bootloader。</p>
-<p>JOS的bootloader有两部分，先是一段汇编代码，在 boot/boot.S里面，然后是一个C源代码，在boot/main.c。</p>
-<p>##</p>
-<p>我们依次来分析这两段代码。</p>
-<h4 id="boot-boot-S-从实模式到保护模式"><a href="#boot-boot-S-从实模式到保护模式" class="headerlink" title="boot/boot.S 从实模式到保护模式"></a>boot/boot.S 从实模式到保护模式</h4><p>正如boot.S里的注释第一句</p>
-<blockquote>
-<h4 id="Start-the-CPU-switch-to-32-bit-protected-mode-jump-into-C"><a href="#Start-the-CPU-switch-to-32-bit-protected-mode-jump-into-C" class="headerlink" title="Start the CPU: switch to 32-bit protected mode, jump into C."></a>Start the CPU: switch to 32-bit protected mode, jump into C.</h4></blockquote>
-<p>这段代码的功能就是从实模式切换到保护模式。<br>我们跳过前面的一些准备代码(tips：boot.S这段代码里有一段是A20的设置，跳过他。<br>)，直接看到48行左右，这才是<strong>关键</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lgdt    gdtdesc</span><br><span class="line">movl    %cr0, %eax</span><br><span class="line">orl     $CR0_PE_ON, %eax</span><br><span class="line">movl    %eax, %cr0</span><br></pre></td></tr></table></figure>
-<p>其中第一行代码是加载一个段描述符表，这是进入保护模式前必要的一步，因为保护模式的内存机制以段机制为基础（在加上页机制），具体可以参考我写的这篇：<a href="http://blog.csdn.net/poundssss/article/details/50927651" target="_blank" rel="external"> JOS Lab2 保护模式下的内存映射机制：段机制 页机制。
-</a><br>这里的gdtdesc定义在最后面</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gdt:</span><br><span class="line">  SEG_NULL				# null seg</span><br><span class="line">  SEG(STA_X|STA_R, 0x0, 0xffffffff)	# code seg</span><br><span class="line">  SEG(STA_W, 0x0, 0xffffffff)	        # data seg</span><br><span class="line"></span><br><span class="line">gdtdesc:</span><br><span class="line">  .word   0x17                            # sizeof(gdt) - 1</span><br><span class="line">  .long   gdt                             # address gdt</span><br></pre></td></tr></table></figure>
-<p>这是一个最简单版本的段描述符，仅仅把内存分为数据段（data seg）和代码段（code seg）。</p>
-<p>接下来三句代码，实现的功能就是实模式到保护模式。(其实就是改变了CR0寄存器里的一位，从0变成了1。)<br>关于CR0寄存器，<a href="https://en.wikipedia.org/wiki/Control_register" target="_blank" rel="external">自己去wiki看啦。</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl    %cr0, %eax</span><br><span class="line">orl     $CR0_PE_ON, %eax</span><br><span class="line">movl    %eax, %cr0</span><br></pre></td></tr></table></figure></p>
-<p>然后通过一个ljmp跳到了<strong>prtcseg</strong>这一段代码里</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">movw    $PROT_MODE_DSEG, %ax    # Our data segment selector</span><br><span class="line">movw    %ax, %ds                # -&gt; DS: Data Segment</span><br><span class="line">movw    %ax, %es                # -&gt; ES: Extra Segment</span><br><span class="line">movw    %ax, %fs                # -&gt; FS</span><br><span class="line">movw    %ax, %gs                # -&gt; GS</span><br><span class="line">movw    %ax, %ss                # -&gt; SS: Stack Segment</span><br></pre></td></tr></table></figure>
-<p>随便设了一些segment的base值，下一句代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">movl    $start, %esp</span><br></pre></td></tr></table></figure>
-<p><strong>这句代码很重要</strong>，这是进入保护模式之后第一个栈顶，<strong>$start</strong>的地址大概在<code>0x7c00</code> 后多一些，这个随便取的，在正式的设定之前，0-start 这段空间做为栈，应该足够了:-D。<br><strong>有了栈，我们可以调用函数了！</strong><br>于是下一句  <code>call bootmain</code>我们进入<strong>main.c</strong></p>
-<h4 id="boot-main-c-勤劳的搬运工"><a href="#boot-main-c-勤劳的搬运工" class="headerlink" title="boot/main.c 勤劳的搬运工"></a>boot/main.c 勤劳的搬运工</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#define ELFHDR		((struct Elf *) 0x10000) // scratch space</span><br></pre></td></tr></table></figure>
-<p>首先定义了一个ELFHDR的量，ELF文件的头文件。ELF是一类文件格式的名称，我们的kernel就是ELF，后续还会有很多地方会用到这个ELF，所以你有必要搞明白他，越早越好-&gt;<a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format" target="_blank" rel="external">wiki是你的朋友。</a><br>反正这一段代码就是根据elf hear里的信息，一段一段的把kernel的代码搬运到内存，从0x10000（1M）(这里还是物理内存地址)开始。理解起来挺容易，中间的一个强制类型转换可能会引起困扰：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ph = (struct Proghdr *) ((uint8_t *) ELFHDR + ELFHDR-&gt;e_phoff);</span><br></pre></td></tr></table></figure>
-<p>其中的(uint8_t <em>)是为了让ELFHDR指针每+1增加1而不是32位指针默认的+4。<br>最后一行`    ((void (</em>)(void)) (ELFHDR-&gt;e_entry))();`在elfhdr中，定义了一个入口地址，call它，我们就开始运行kernel的第一行代码，从这里开始bootloader结束。</p>
-<h4 id="kern-entry-S-内核！内核！"><a href="#kern-entry-S-内核！内核！" class="headerlink" title="kern/entry.S 内核！内核！"></a>kern/entry.S 内核！内核！</h4><p>哈哈哈哈，我们从boot文件夹跳到了kern文件夹，这意味着，我们终于进入内核啦！撒花~</p>
-<p>冷静下来继续读代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">movl	$(RELOC(entry_pgdir)), %eax</span><br><span class="line">movl	%eax, %cr3</span><br><span class="line"># Turn on paging.</span><br><span class="line">movl	%cr0, %eax</span><br><span class="line">orl	$(CR0_PE|CR0_PG|CR0_WP), %eax</span><br><span class="line">movl	%eax, %cr0</span><br></pre></td></tr></table></figure>
-<p>由于虚拟内存机制还没建立(lab2做这事儿)，所以老师帮我们手写了4MB的页表，在<strong>kern/entrypgdir.c</strong>里面，大概功能就是把1M-5M这段物理地址同时映射到从0x10000和0xF0000000开始的高（虚拟）地址中（我们的内核将来就处于从这里开始的256M空间中。）把entry_pgdir加载到cr3寄存器（用来存放页表一级目录基地址的寄存器）。然后打开cr0的页机制（同时打开的还有wp，自己wiki cr0吧…）。</p>
-<blockquote>
-<p>Now paging is enabled, but we’re still running at a low EIP<br>    (why is this okay?).</p>
-</blockquote>
-<p>注释里这样问，为什么可以呢？因为…老师帮我们同时map了原来的地址和加上0xf0000000两段，也就是在虚拟内存里有2个4M空间（好绕口…我实在不知道怎么表述）。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">movl	$0x0,%ebp			# nuke frame pointer</span><br><span class="line"></span><br><span class="line"># Set the stack pointer</span><br><span class="line">movl	$(bootstacktop),%esp</span><br><span class="line"></span><br><span class="line"># now to C code</span><br><span class="line">call	i386_init</span><br></pre></td></tr></table></figure>
-<p>这里建立了虚拟地址下的栈基地址（随便定的啦…就定0好了）和栈顶地址<strong>bootstacktop</strong>。这里是建立了保护模式下（简单的）虚拟内存机制（lab2建立完整的）后的栈。于是我们可以调用函数啦，:-D。<br>于是我们就</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call	i386_init</span><br></pre></td></tr></table></figure>
-<p>开始初始化工作，基本就没有lab1什么事了，到lab4之前基本上都在完善i386_init里的内容，建立内存机制，建立进程（JOS里叫运行环境environment），建立多CPU啦啦啦~</p>
-<p>#-EOF</p>
-
+        <h3 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h3><h6 id="1-什么是拷贝构造函数？什么时候使用拷贝构造函数？"><a href="#1-什么是拷贝构造函数？什么时候使用拷贝构造函数？" class="headerlink" title="1.什么是拷贝构造函数？什么时候使用拷贝构造函数？"></a>1.什么是<strong>拷贝构造函数</strong>？什么时候使用拷贝构造函数？</h6><p><strong>第一个参数</strong>为自身类型<strong>引用</strong>的构造函数。<br>比如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Foo&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">	Foo();                   <span class="comment">//默认构造函数</span></span><br><span class="line">	Foo(<span class="keyword">const</span> Foo&amp;);         <span class="comment">//拷贝构造函数</span></span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在以下情况中被使用：</p>
+<ul>
+<li>拷贝初始化(用=定义变量)</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Foo b; Foo a=b;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>函数参数采用值传递而不是指针传递时    </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Foo <span class="title">a</span><span class="params">(b)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回类型为非引用类型的函数返回一个对象</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Foo <span class="title">example</span><span class="params">()</span></span>&#123;.......; <span class="keyword">return</span> b;&#125;<span class="comment">// b为Foo类型</span></span><br></pre></td></tr></table></figure>
+<h6 id="2-为什么拷贝构造函数的第一个参数要是引用？"><a href="#2-为什么拷贝构造函数的第一个参数要是引用？" class="headerlink" title="2.为什么拷贝构造函数的第一个参数要是引用？"></a>2.为什么拷贝构造函数的第一个参数要是引用？</h6><p>如果不是引用的话，在参数值传递时会调用另一个拷贝构造函数，然后开始进入死循环。</p>
+<hr>
+<h3 id="拷贝赋值函数"><a href="#拷贝赋值函数" class="headerlink" title="拷贝赋值函数"></a>拷贝赋值函数</h3><p>用在比如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Foo a,b;	<span class="comment">//已调用默认构造函数初始化</span></span><br><span class="line">a=b;			<span class="comment">//拷贝赋值函数</span></span><br></pre></td></tr></table></figure>
+<p>定义：类型为Foo的类型的拷贝赋值函数定义为<br><code>Foo&amp; operator=(const Foo&amp;)</code>。</p>
+<p>其中返回值为引用类型的目的，是<strong>为了使用户自定义类型能够和内置类型一样</strong>,能够连续赋值。比如<code>a=b=c;</code></p>
+<p>应当注意的是，默认拷贝赋值只是简单的挨个赋值，在有些时候，不能使用默认拷贝函数，否则会出现编译错误。</p>
+<p>比如</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Foo&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> a;</span><br><span class="line">	<span class="keyword">int</span>&amp; b;</span><br><span class="line">	Foo();</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> c;</span><br><span class="line">&#125;</span><br><span class="line">Foo a,b;</span><br><span class="line">b=a; </span><br><span class="line"><span class="comment">//上面那一句话明显是错误的，因为如果正确的话，那就意味着我们能够对引用，const重新赋值，以及能够直接获取到类的私有成员，这显然是错误的。</span></span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -331,7 +325,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JOS/" rel="tag">#JOS</a>
+            <a href="/tags/不会使用C/" rel="tag">#不会使用C++</a>
           
         </div>
       
@@ -340,13 +334,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/03/22/该刷的Leetcode还是要刷的啊/" rel="next" title="携程实习生笔试">
+                <i class="fa fa-chevron-left"></i> 携程实习生笔试
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/19/MIT6-828-LAB2-保护模式，段机制，页机制/" rel="prev" title="MIT6.828 LAB2 保护模式，段机制，页机制">
-                MIT6.828 LAB2 保护模式，段机制，页机制 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -500,7 +494,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#MIT-6-828课程正式开始-D-撒花"><span class="nav-number">1.</span> <span class="nav-text">MIT 6.828课程正式开始 :-D 撒花</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-1：PC-Bootstrap"><span class="nav-number"></span> <span class="nav-text">Part 1：PC Bootstrap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-2-The-bootloader"><span class="nav-number"></span> <span class="nav-text">Part 2: The bootloader</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#boot-boot-S-从实模式到保护模式"><span class="nav-number">0.1.</span> <span class="nav-text">boot/boot.S 从实模式到保护模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start-the-CPU-switch-to-32-bit-protected-mode-jump-into-C"><span class="nav-number">0.2.</span> <span class="nav-text">Start the CPU: switch to 32-bit protected mode, jump into C.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#boot-main-c-勤劳的搬运工"><span class="nav-number">0.3.</span> <span class="nav-text">boot/main.c 勤劳的搬运工</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kern-entry-S-内核！内核！"><span class="nav-number">0.4.</span> <span class="nav-text">kern/entry.S 内核！内核！</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">1.</span> <span class="nav-text">拷贝构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-什么是拷贝构造函数？什么时候使用拷贝构造函数？"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1.什么是拷贝构造函数？什么时候使用拷贝构造函数？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-为什么拷贝构造函数的第一个参数要是引用？"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">2.为什么拷贝构造函数的第一个参数要是引用？</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拷贝赋值函数"><span class="nav-number">2.</span> <span class="nav-text">拷贝赋值函数</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -768,9 +762,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'tommylwp';
-      var disqus_identifier = '2016/03/19/JOS lab1 boot 加载操作系统/';
-      var disqus_title = 'MIT6.828 LAB1 bootloader 加载操作系统';
-      var disqus_url = 'http://lunzimaker.github.io/2016/03/19/JOS lab1 boot 加载操作系统/';
+      var disqus_identifier = '2016/03/22/C++入门 拷贝构造与拷贝赋值/';
+      var disqus_title = 'C++入门系列：拷贝构造函数 拷贝赋值函数';
+      var disqus_url = 'http://lunzimaker.github.io/2016/03/22/C++入门 拷贝构造与拷贝赋值/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
