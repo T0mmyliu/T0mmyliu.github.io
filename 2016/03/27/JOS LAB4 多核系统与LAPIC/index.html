@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="不会使用C++," />
+  <meta name="keywords" content="JOS," />
 
 
 
@@ -57,34 +57,25 @@
 
 
 
-<meta name="description" content="拷贝构造函数1.什么是拷贝构造函数？什么时候使用拷贝构造函数？第一个参数为自身类型引用的构造函数。比如
-123456class Foo&amp;#123;	public:	Foo();                   //默认构造函数	Foo(const Foo&amp;amp;);         //拷贝构造函数	//...&amp;#125;;
-在以下情况中被使用：
-
-拷贝初始化(用=定义变量)
-
-1Foo b">
+<meta name="description" content="JOS Lab4 SMP system and LAPIC
+JOS进入Lab4过后困惑我的一个问题是SMP(symmetric multiprocessing)究竟是怎么实现的，即操作系统是如何管理多CPU工作的？多CPU将如何影响我们设计JOS。
+我下面写一下我目前的理解，如果有错误，请读者斧正。
+APIC首先要明确一点：当我们要新运行一个进程时，选用哪个CPU不归OS管，这全由Intel的提供">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++入门系列：拷贝构造函数 拷贝赋值函数">
-<meta property="og:url" content="http://lunzimaker.github.io/2016/03/22/C++入门 拷贝构造与拷贝赋值/index.html">
+<meta property="og:title" content="JOS lab4 Lapic与Intel多核系统">
+<meta property="og:url" content="http://lunzimaker.github.io/2016/03/27/JOS LAB4 多核系统与LAPIC/index.html">
 <meta property="og:site_name" content="TommyLiu's Blog">
-<meta property="og:description" content="拷贝构造函数1.什么是拷贝构造函数？什么时候使用拷贝构造函数？第一个参数为自身类型引用的构造函数。比如
-123456class Foo&amp;#123;	public:	Foo();                   //默认构造函数	Foo(const Foo&amp;amp;);         //拷贝构造函数	//...&amp;#125;;
-在以下情况中被使用：
-
-拷贝初始化(用=定义变量)
-
-1Foo b">
-<meta property="og:updated_time" content="2016-03-25T10:42:34.690Z">
+<meta property="og:description" content="JOS Lab4 SMP system and LAPIC
+JOS进入Lab4过后困惑我的一个问题是SMP(symmetric multiprocessing)究竟是怎么实现的，即操作系统是如何管理多CPU工作的？多CPU将如何影响我们设计JOS。
+我下面写一下我目前的理解，如果有错误，请读者斧正。
+APIC首先要明确一点：当我们要新运行一个进程时，选用哪个CPU不归OS管，这全由Intel的提供">
+<meta property="og:updated_time" content="2016-03-26T16:33:27.510Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C++入门系列：拷贝构造函数 拷贝赋值函数">
-<meta name="twitter:description" content="拷贝构造函数1.什么是拷贝构造函数？什么时候使用拷贝构造函数？第一个参数为自身类型引用的构造函数。比如
-123456class Foo&amp;#123;	public:	Foo();                   //默认构造函数	Foo(const Foo&amp;amp;);         //拷贝构造函数	//...&amp;#125;;
-在以下情况中被使用：
-
-拷贝初始化(用=定义变量)
-
-1Foo b">
+<meta name="twitter:title" content="JOS lab4 Lapic与Intel多核系统">
+<meta name="twitter:description" content="JOS Lab4 SMP system and LAPIC
+JOS进入Lab4过后困惑我的一个问题是SMP(symmetric multiprocessing)究竟是怎么实现的，即操作系统是如何管理多CPU工作的？多CPU将如何影响我们设计JOS。
+我下面写一下我目前的理解，如果有错误，请读者斧正。
+APIC首先要明确一点：当我们要新运行一个进程时，选用哪个CPU不归OS管，这全由Intel的提供">
 
 
 
@@ -102,7 +93,7 @@
   };
 </script>
 
-  <title> C++入门系列：拷贝构造函数 拷贝赋值函数 | TommyLiu's Blog </title>
+  <title> JOS lab4 Lapic与Intel多核系统 | TommyLiu's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -242,7 +233,7 @@
             
             
               
-                C++入门系列：拷贝构造函数 拷贝赋值函数
+                JOS lab4 Lapic与Intel多核系统
               
             
           </h1>
@@ -254,8 +245,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-22T13:11:18+08:00" content="2016-03-22">
-              2016-03-22
+            <time itemprop="dateCreated" datetime="2016-03-27T00:11:18+08:00" content="2016-03-27">
+              2016-03-27
             </time>
           </span>
 
@@ -265,8 +256,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/22/C++入门 拷贝构造与拷贝赋值/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/03/22/C++入门 拷贝构造与拷贝赋值/" itemprop="commentsCount"></span>
+                <a href="/2016/03/27/JOS LAB4 多核系统与LAPIC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/03/27/JOS LAB4 多核系统与LAPIC/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -288,30 +279,21 @@
       
 
       
-        <h3 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h3><h6 id="1-什么是拷贝构造函数？什么时候使用拷贝构造函数？"><a href="#1-什么是拷贝构造函数？什么时候使用拷贝构造函数？" class="headerlink" title="1.什么是拷贝构造函数？什么时候使用拷贝构造函数？"></a>1.什么是<strong>拷贝构造函数</strong>？什么时候使用拷贝构造函数？</h6><p><strong>第一个参数</strong>为自身类型<strong>引用</strong>的构造函数。<br>比如</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Foo&#123;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">	Foo();                   <span class="comment">//默认构造函数</span></span><br><span class="line">	Foo(<span class="keyword">const</span> Foo&amp;);         <span class="comment">//拷贝构造函数</span></span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>在以下情况中被使用：</p>
-<ul>
-<li>拷贝初始化(用=定义变量)</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Foo b; Foo a=b;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>函数参数采用值传递而不是指针传递时    </li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Foo <span class="title">a</span><span class="params">(b)</span></span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>返回类型为非引用类型的函数返回一个对象</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Foo <span class="title">example</span><span class="params">()</span></span>&#123;.......; <span class="keyword">return</span> b;&#125;<span class="comment">// b为Foo类型</span></span><br></pre></td></tr></table></figure>
-<h6 id="2-为什么拷贝构造函数的第一个参数要是引用？"><a href="#2-为什么拷贝构造函数的第一个参数要是引用？" class="headerlink" title="2.为什么拷贝构造函数的第一个参数要是引用？"></a>2.为什么拷贝构造函数的第一个参数要是引用？</h6><p>如果不是引用的话，在参数值传递时会调用另一个拷贝构造函数，然后开始进入死循环。</p>
+        <h1 id="JOS-Lab4-SMP-system-and-LAPIC"><a href="#JOS-Lab4-SMP-system-and-LAPIC" class="headerlink" title="JOS Lab4 SMP system and LAPIC"></a>JOS Lab4 SMP system and LAPIC</h1><hr>
+<p>JOS进入Lab4过后困惑我的一个问题是SMP(symmetric multiprocessing)究竟是怎么实现的，即操作系统是如何管理多CPU工作的？多CPU将如何影响我们设计JOS。</p>
+<p>我下面写一下我目前的理解，如果有错误，请读者斧正。</p>
+<h3 id="APIC"><a href="#APIC" class="headerlink" title="APIC"></a>APIC</h3><p>首先要明确一点：当我们要新运行一个进程时，<strong>选用哪个CPU不归OS管，这全由Intel的提供的APIC硬件帮助你决定。</strong></p>
+<p>APIC是”Advanced Programmable Interrupt Controller”（高级可编程中断控制器），它位于Intel CPU内部，每一个CPU都有一个Local的APIC（叫做LAPIC），APIC是可编程(正如名字里的programmable)的，我们通过对LAPIC的寄存器进行读写，来和CPU进行交互。</p>
+<h4 id="LAPIC寄存器-memory-maped-IO"><a href="#LAPIC寄存器-memory-maped-IO" class="headerlink" title="LAPIC寄存器 memory-maped IO"></a>LAPIC寄存器 memory-maped IO</h4><p>一个问题是——既然我们是要读写LAPIC的寄存器，那他们的地址是在哪里呢？</p>
+<p>Intel默认把他们的地址映射到了虚拟内存空间FEC00000的地方。（而在jos实验中我们把它重新map到了一个比较低的地址，因为他太高了,对于我们一kernbase为基础的映射方式来说，这段话对于理解LAPIC无关。)</p>
+<p>于是我们就像读写内存一样，可以读写APIC的寄存器。</p>
+<p>那么下一个问题是，究竟APIC为我们提供了哪些信息呢？</p>
+<p>在kern/lapic.c的顶部可以看到，大概包括了目前这个CPU的ID等一些列寄存器。在后续的BSP(最先启动的CPU)启动APs(其他CPU)的过程代码中，我们都看得到这些寄存器被使用，通过读写内存上的响应地址。</p>
+<p>好了差不多，你就可以很顺畅的自己通过阅读JOS代码，开启LAB4了。:-D</p>
 <hr>
-<h3 id="拷贝赋值函数"><a href="#拷贝赋值函数" class="headerlink" title="拷贝赋值函数"></a>拷贝赋值函数</h3><p>用在比如</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Foo a,b;	<span class="comment">//已调用默认构造函数初始化</span></span><br><span class="line">a=b;			<span class="comment">//拷贝赋值函数</span></span><br></pre></td></tr></table></figure>
-<p>定义：类型为Foo的类型的拷贝赋值函数定义为<br><code>Foo&amp; operator=(const Foo&amp;)</code>。</p>
-<p>其中返回值为引用类型的目的，是<strong>为了使用户自定义类型能够和内置类型一样</strong>,能够连续赋值。比如<code>a=b=c;</code></p>
-<p>应当注意的是，默认拷贝赋值只是简单的挨个赋值，在有些时候，不能使用默认拷贝函数，否则会出现编译错误。</p>
-<p>比如</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Foo&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> a;</span><br><span class="line">	<span class="keyword">int</span>&amp; b;</span><br><span class="line">	Foo();</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">int</span> c;</span><br><span class="line">&#125;</span><br><span class="line">Foo a,b;</span><br><span class="line">b=a; </span><br><span class="line"><span class="comment">//上面那一句话明显是错误的，因为如果正确的话，那就意味着我们能够对引用，const重新赋值，以及能够直接获取到类的私有成员，这显然是错误的。</span></span><br></pre></td></tr></table></figure>
+<p>后附寄存器定义 位于Kern/lapic.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// Local APIC registers, divided by 4 for use as uint32_t[] indices.</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ID      (0x0020/4)   <span class="comment">// ID</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VER     (0x0030/4)   <span class="comment">// Version</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TPR     (0x0080/4)   <span class="comment">// Task Priority</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> EOI     (0x00B0/4)   <span class="comment">// EOI</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SVR     (0x00F0/4)   <span class="comment">// Spurious Interrupt Vector</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ENABLE  0x00000100   <span class="comment">// Unit Enable</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ESR     (0x0280/4)   <span class="comment">// Error Status</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ICRLO   (0x0300/4)   <span class="comment">// Interrupt Command</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INIT     0x00000500   <span class="comment">// INIT/RESET</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STARTUP  0x00000600   <span class="comment">// Startup IPI</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DELIVS   0x00001000   <span class="comment">// Delivery status</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ASSERT   0x00004000   <span class="comment">// Assert interrupt (vs deassert)</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DEASSERT 0x00000000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LEVEL    0x00008000   <span class="comment">// Level triggered</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BCAST    0x00080000   <span class="comment">// Send to all APICs, including self.</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> OTHERS   0x000C0000   <span class="comment">// Send to all APICs, excluding self.</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUSY     0x00001000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FIXED    0x00000000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ICRHI   (0x0310/4)   <span class="comment">// Interrupt Command [63:32]</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TIMER   (0x0320/4)   <span class="comment">// Local Vector Table 0 (TIMER)</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> X1       0x0000000B   <span class="comment">// divide counts by 1</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PERIODIC 0x00020000   <span class="comment">// Periodic</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PCINT   (0x0340/4)   <span class="comment">// Performance Counter LVT</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LINT0   (0x0350/4)   <span class="comment">// Local Vector Table 1 (LINT0)</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LINT1   (0x0360/4)   <span class="comment">// Local Vector Table 2 (LINT1)</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ERROR   (0x0370/4)   <span class="comment">// Local Vector Table 3 (ERROR)</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MASKED   0x00010000   <span class="comment">// Interrupt masked</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TICR    (0x0380/4)   <span class="comment">// Timer Initial Count</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TCCR    (0x0390/4)   <span class="comment">// Timer Current Count</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TDCR    (0x03E0/4)   <span class="comment">// Timer Divide Configuration</span></span></span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -325,7 +307,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/不会使用C/" rel="tag">#不会使用C++</a>
+            <a href="/tags/JOS/" rel="tag">#JOS</a>
           
         </div>
       
@@ -334,17 +316,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/22/该刷的Leetcode还是要刷的啊/" rel="next" title="携程实习生笔试">
-                <i class="fa fa-chevron-left"></i> 携程实习生笔试
+              <a href="/2016/03/22/C++入门 拷贝构造与拷贝赋值/" rel="next" title="C++入门系列：拷贝构造函数 拷贝赋值函数">
+                <i class="fa fa-chevron-left"></i> C++入门系列：拷贝构造函数 拷贝赋值函数
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/27/JOS LAB4 多核系统与LAPIC/" rel="prev" title="JOS lab4 Lapic与Intel多核系统">
-                JOS lab4 Lapic与Intel多核系统 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -498,7 +476,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#拷贝构造函数"><span class="nav-number">1.</span> <span class="nav-text">拷贝构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-什么是拷贝构造函数？什么时候使用拷贝构造函数？"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1.什么是拷贝构造函数？什么时候使用拷贝构造函数？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-为什么拷贝构造函数的第一个参数要是引用？"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">2.为什么拷贝构造函数的第一个参数要是引用？</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拷贝赋值函数"><span class="nav-number">2.</span> <span class="nav-text">拷贝赋值函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JOS-Lab4-SMP-system-and-LAPIC"><span class="nav-number">1.</span> <span class="nav-text">JOS Lab4 SMP system and LAPIC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#APIC"><span class="nav-number">1.0.1.</span> <span class="nav-text">APIC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LAPIC寄存器-memory-maped-IO"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">LAPIC寄存器 memory-maped IO</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -766,9 +744,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'tommylwp';
-      var disqus_identifier = '2016/03/22/C++入门 拷贝构造与拷贝赋值/';
-      var disqus_title = 'C++入门系列：拷贝构造函数 拷贝赋值函数';
-      var disqus_url = 'http://lunzimaker.github.io/2016/03/22/C++入门 拷贝构造与拷贝赋值/';
+      var disqus_identifier = '2016/03/27/JOS LAB4 多核系统与LAPIC/';
+      var disqus_title = 'JOS lab4 Lapic与Intel多核系统';
+      var disqus_url = 'http://lunzimaker.github.io/2016/03/27/JOS LAB4 多核系统与LAPIC/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
