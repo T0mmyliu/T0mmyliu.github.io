@@ -1,0 +1,795 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="##前言之前做了MIT6.828操作系统课程，过程很痛苦，也学到了很多。不过最大的收货还是发现了非常好的学习方式——刷顶级名校的闻名课程。自然同样是麻省理工久负盛名的分布式系统课程MIT6.824就顺理成章的加入了todolist。值得议一提的是，这两门课程都是同一个实验室出品，实在是良心。
+####我的项目地址在:github.com/T0mmyliu/distributed-system-co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TommyLiu's Blog">
+<meta property="og:url" content="http://lunzimaker.github.io/2016/09/25/MIT6.824 分布式系统 lab1/index.html">
+<meta property="og:site_name" content="TommyLiu's Blog">
+<meta property="og:description" content="##前言之前做了MIT6.828操作系统课程，过程很痛苦，也学到了很多。不过最大的收货还是发现了非常好的学习方式——刷顶级名校的闻名课程。自然同样是麻省理工久负盛名的分布式系统课程MIT6.824就顺理成章的加入了todolist。值得议一提的是，这两门课程都是同一个实验室出品，实在是良心。
+####我的项目地址在:github.com/T0mmyliu/distributed-system-co">
+<meta property="og:image" content="http://i.stack.imgur.com/EH8tY.jpg">
+<meta property="og:updated_time" content="2016-09-25T12:59:55.057Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TommyLiu's Blog">
+<meta name="twitter:description" content="##前言之前做了MIT6.828操作系统课程，过程很痛苦，也学到了很多。不过最大的收货还是发现了非常好的学习方式——刷顶级名校的闻名课程。自然同样是麻省理工久负盛名的分布式系统课程MIT6.824就顺理成章的加入了todolist。值得议一提的是，这两门课程都是同一个实验室出品，实在是良心。
+####我的项目地址在:github.com/T0mmyliu/distributed-system-co">
+<meta name="twitter:image" content="http://i.stack.imgur.com/EH8tY.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6263613556525106000,
+      author: 'tommyliu'
+    }
+  };
+</script>
+
+  <title>  | TommyLiu's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?05d5120bf62f068170ab94f1b8ec909b";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">TommyLiu's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-25T20:58:31+08:00" content="2016-09-25">
+              2016-09-25
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/25/MIT6.824 分布式系统 lab1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/09/25/MIT6.824 分布式系统 lab1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>##前言<br>之前做了MIT6.828操作系统课程，过程很痛苦，也学到了很多。不过最大的收货还是发现了非常好的学习方式——刷顶级名校的闻名课程。自然同样是麻省理工久负盛名的分布式系统课程MIT6.824就顺理成章的加入了todolist。值得议一提的是，这两门课程都是同一个实验室出品，实在是良心。</p>
+<p>####<a href="https://github.com/T0mmyliu/distributed-system-course-MIT6.824" target="_blank" rel="external">我的项目地址在:github.com/T0mmyliu/distributed-system-course-MIT6.824</a></p>
+<p>####<a href="https://pdos.csail.mit.edu/6.824/" target="_blank" rel="external">课程网址在:https://pdos.csail.mit.edu/6.824/</a></p>
+<p>##MapReduce</p>
+<p>MapReduce是谷歌的并行计算框架，据说是谷歌的工程师觉得每天处理分布式的代码，开锁解锁实在是又难又烦，而且有很多重复工作。就对并行的过程进行了抽象，就搞了这样一套简单易用的框架。</p>
+<p>要想理解其中奥妙，当然是要阅读谷歌的那一篇顶顶有名的论文<a href="https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf" target="_blank" rel="external">“MapReduce: Simplified Data Processing on Large Clusters”</a>，这篇论文也在课程的schedule里面，值得一提的是，6.824的schedule里有很多assignment，其中不少是论文，能入选的都是经典中的经典，一定不能跳过，况且很多都和lab有很大的关系。</p>
+<p>###什么是MapReduce<br>虽然MapReduce是一个威力强大的工具，但是一般来说威力强大的工具最好也要简单好用，而把复杂封装在背后，才能称之为好工具。具体背后有多复杂，比如如何处理各类异常，我暂时不能领会。这里只介绍下这个工具如何简单好用！</p>
+<p>lab1需要我们实现一个toy版本的MapReduce框架出来，虽然代码量比较少，但是难度也还是不小，下面先解释下这个mapreduce的逻辑。</p>
+<p>###直观解释<br>MapReduce的逻辑实在是非常的直观。简单的说就分为两步:Map 和 Reduce 。</p>
+<p>####用一个生活中的例子来举例说明：炒菜</p>
+<p>假如你是一个酒店的行政总厨(Master)，你不负责做菜，只负责指挥下面的厨师Worker。每天都进行着如下的步骤：</p>
+<p>####Register<br>每天都会有人去采购很多食材回来，有牛肉，猪肉，藕，土豆……..买回来这些食物后，需要将他们注册在一个本子上，这就是今天要处理的任务(task)了！</p>
+<p>####Partition and Ｍap<br>做菜的第一个过程，当然是切菜，你是主厨(Master)，你不负责做菜，只负责通知。”喂，过来把这个藕切成丁“，于是就有一个空闲的厨师过来切藕，你就把藕这个任务分发给了厨师(Worker)。切东西的过程，就是partition。之后可能还需要对食物做一些预先处理，比如抹上盐和料酒，这个过程就是mapfunc。</p>
+<p>厨师切好藕后，根据一个规则”噢，藕是要炒肉的，放到第一个盆子里面去“，规则对于每一个厨师都是一样的，这样保证了，同一个input，处理(map)完后肯定都在一起。比如藕片肯定就都放在第一个盆里。一般来说如果有R个输出对象(盆子)，一个简单的分配规则就是hash后MOD R。</p>
+<p>####Reduce<br>在介绍这个环节之前有一点要注意：和做菜一样，炒菜之前务必要保证菜已经切好了，这样才能不至于要炒回锅肉，发现只有肉片没有蒜苗。当确认前一个环节(map)确实结束后，开始炒菜(Reduce)。在这个环节里，你还是负责通知空闲的厨师，”喂你去炒一份回锅肉“。就有一个厨师接收到这个任务，开始准备炒肉。</p>
+<p>”我需要煮熟的五花肉“说完从第一个盆子里拿了肉，”我还需要辣椒”，说完从第二个盆子里拿了辣椒。。。。“最后来一点蒜”从第R个盆子里拿了蒜。原料准备好了，就开始炒菜，这个过程就是reduce function，炒完了过后，统一输出到一个盘子里。这个环节一共要炒M盘菜(M个任务)，那么就有了M盘菜了。</p>
+<p>####Merge<br>这个环节最好理解，在所有菜都做好了之后，统一端出去，给客人(输入)。</p>
+<p>解释的比较粗略，具体还是要去读<a href="https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf" target="_blank" rel="external">“MapReduce: Simplified Data Processing on Large Clusters”</a>。也可以参考这一副图理解一下：</p>
+<p><img src="http://i.stack.imgur.com/EH8tY.jpg" alt="这里写图片描述"></p>
+<p>##LAB1</p>
+<p>前两个部分是完成非分布式的版本</p>
+<p>###Part I: Map/Reduce input and output</p>
+<p>domap这个函数没有什么好说的，就是读入一个指定文件，跑一遍mapfunc，得到一个key-value的slice。然后将slice分发到R个文件里去。分发部分这样写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for _, kv := range mapRes &#123;</span><br><span class="line">	index := int(ihash(kv.Key)) % nReduce</span><br><span class="line">	encoders[index].Encode(&amp;kv)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>###Part II: Single-worker word count</p>
+<p>单词计数，作为用户写MapFunction和ReduceFunction，体会一下MapReduce框架使用起来有多简洁。</p>
+<p>###Part III: Distributing MapReduce tasks</p>
+<p>终于到分布式的版本了，厉害了我的哥！</p>
+<p>虽然需要完成的代码量很少，但是我确实花了很长一段时间才搞懂要干什么，然后又花了很长一段时间debug。</p>
+<p>首先得通读6.824/src/mapreduce模块下的每一个.go文件，尤其是不能忘记了test_test.go文件，多次经验证明，测试文件是最好的说明文档！！！</p>
+<p>读说明我们知道，我们需要通过的单元测试是TestBasic<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">func TestBasic(t *testing.T) &#123;</span><br><span class="line">    mr := setup()</span><br><span class="line">    for i := 0; i &lt; 2; i++ &#123;</span><br><span class="line">        go RunWorker(mr.address, port(&quot;worker&quot;+strconv.Itoa(i)),</span><br><span class="line">            MapFunc, ReduceFunc, -1)</span><br><span class="line">    &#125;</span><br><span class="line">    mr.Wait()</span><br><span class="line">    check(t, mr.files)</span><br><span class="line">    checkWorker(t, mr.stats)</span><br><span class="line">    cleanup(mr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中setup是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">func setup() *Master &#123;</span><br><span class="line">    files := makeInputs(nMap)</span><br><span class="line">    master := port(&quot;master&quot;)</span><br><span class="line">    mr := Distributed(&quot;test&quot;, files, nReduce, master)</span><br><span class="line">    return mr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>第一个主要的函数调用是<code>Distributed</code>,位于master.go<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">func Distributed(jobName string, files []string, nreduce int, master string) (mr *Master) &#123;</span><br><span class="line">    mr = newMaster(master)　　</span><br><span class="line">    mr.startRPCServer()   //初始化RPC　server</span><br><span class="line">    go mr.run(jobName, files, nreduce, mr.schedule, func() &#123;</span><br><span class="line">        mr.stats = mr.killWorkers()</span><br><span class="line">        mr.stopRPCServer()</span><br><span class="line">    &#125;)</span><br><span class="line">    return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后就是需要去master_rpc.go里去看<code>mr.startRPCServer()</code>。</p>
+<p>…省略dsp过程若干，给的代码中间的注释挺多，应该只需要时间问题。于是弄懂了要在schedule.go里写的东西是什么。</p>
+<p>开始干活…(这一步很快…因为实验一的代码量很小)</p>
+<p>提几个要注意地方，有些是语言的注意事项，因为我是刚刚学golang，所以遇到了一些问题。</p>
+<p>####Q:channel何时会阻塞？<br>Ａ:当chan为空，又要取出(&lt;-chan)的时候，以及如果chan满了，要push进去的时候。尤其是第二点。给的代码里的chan都是没有buffered的，所以只要chan里有正在等待的element，再push就会阻塞<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">    type Master struct &#123;</span><br><span class="line">	sync.Mutex</span><br><span class="line"></span><br><span class="line">	address         string</span><br><span class="line">	registerChannel chan string</span><br><span class="line">	doneChannel     chan bool</span><br><span class="line">	workers         []string // protected by the mutex</span><br><span class="line"></span><br><span class="line">	// Per-task information</span><br><span class="line">	jobName string   // Name of currently executing job</span><br><span class="line">	files   []string // Input files</span><br><span class="line">	nReduce int      // Number of reduce partitions</span><br><span class="line"></span><br><span class="line">	shutdown chan struct&#123;&#125;</span><br><span class="line">	l        net.Listener</span><br><span class="line">	stats    []int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>处理方法很简单，就是把普通的chan&lt;-element放到goroutine里<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go func()&#123;</span><br><span class="line">    chan&lt;-element</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure></p>
+<p>####Q:为什么我的代码能通过map,但是一到reduce，运行前两个文件就失败了？<br>A:我被这个bug卡了一晚上…就如前面说的，就如同做菜一样，你要保证所有原材料都已经就绪了，才能开始炒菜。同理，你要保证map的所有go　thread已经结束了，所有的中间文件已经生产了，才能开始下一步！！！<br>可以采用计数的方法，具体是用了<code>sync.WaitGroup</code>,具体如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var wg sync.WaitGroup </span><br><span class="line"></span><br><span class="line">for taskIndex := 0; taskIndex &lt; ntasks; taskIndex++ &#123;</span><br><span class="line">	wg.Add(1)</span><br><span class="line">	go func(index int) &#123;</span><br><span class="line">		defer wg.Done()</span><br><span class="line">           dotask...........</span><br><span class="line">	&#125;(taskIndex)</span><br><span class="line">&#125;</span><br><span class="line">wg.Wait()</span><br><span class="line">fmt.Printf(&quot;Schedule: %v phase done\n&quot;, phase)</span><br></pre></td></tr></table></figure></p>
+<p>###Part IV: Handling worker failures</p>
+<p>任务失败情况的处理在这个lab里很简单…就是把没完成的任务重新发出去就可以了。具体用循环来做：分发任务－&gt;任务失败，继续到开头／任务成功，break退出。</p>
+<p>###最后写出来的schedule代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">package mapreduce</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;sync&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">// schedule starts and waits for all tasks in the given phase (Map or Reduce).</span><br><span class="line">func (mr *Master) schedule(phase jobPhase) &#123;</span><br><span class="line">    var ntasks int</span><br><span class="line">    var nios int // number of inputs (for reduce) or outputs (for map)</span><br><span class="line">    switch phase &#123;</span><br><span class="line">    case mapPhase:</span><br><span class="line">        ntasks = len(mr.files)</span><br><span class="line">        nios = mr.nReduce</span><br><span class="line">    case reducePhase:</span><br><span class="line">        ntasks = mr.nReduce</span><br><span class="line">        nios = len(mr.files)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fmt.Printf(&quot;Schedule: %v %v tasks (%d I/Os)\n&quot;, ntasks, phase, nios)</span><br><span class="line"></span><br><span class="line">    // All ntasks tasks have to be scheduled on workers, and only once all of</span><br><span class="line">    // them have been completed successfully should the function return.</span><br><span class="line">    // Remember that workers may fail, and that any given worker may finish</span><br><span class="line">    // multiple tasks.</span><br><span class="line">    //</span><br><span class="line">    // TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO</span><br><span class="line">    //</span><br><span class="line">    taskArgsList := make([]DoTaskArgs, ntasks)</span><br><span class="line">    for i := 0; i &lt; ntasks; i++ &#123;</span><br><span class="line">        taskArgsList[i].JobName = mr.jobName</span><br><span class="line">        taskArgsList[i].Phase = phase</span><br><span class="line">        taskArgsList[i].TaskNumber = i</span><br><span class="line">        taskArgsList[i].NumOtherPhase = nios</span><br><span class="line">        taskArgsList[i].File = mr.files[i]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fmt.Printf(&quot;Schedule: taskArgsList prepared.\n&quot;)</span><br><span class="line">    var wg sync.WaitGroup //</span><br><span class="line"></span><br><span class="line">    for taskIndex := 0; taskIndex &lt; ntasks; taskIndex++ &#123;</span><br><span class="line">        wg.Add(1)</span><br><span class="line">        var idleWorker string</span><br><span class="line"></span><br><span class="line">        go func(index int) &#123;</span><br><span class="line">            defer wg.Done()</span><br><span class="line">            for &#123;</span><br><span class="line">                idleWorker = &lt;-mr.registerChannel</span><br><span class="line">                ok := call(idleWorker, &quot;Worker.DoTask&quot;, &amp;taskArgsList[index], new(struct&#123;&#125;))</span><br><span class="line">                if ok == false &#123;</span><br><span class="line">                    fmt.Printf(&quot;Master: RPC %s DoTask error\n&quot;, idleWorker)</span><br><span class="line">                    continue</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    go func() &#123;</span><br><span class="line">                        mr.registerChannel &lt;- idleWorker</span><br><span class="line">                    &#125;()</span><br><span class="line">                    break</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;(taskIndex)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Printf(&quot;Schedule: %v phase done\n&quot;, phase)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/27/JOS LAB4 多核系统与LAPIC/" rel="next" title="JOS lab4 Lapic与Intel多核系统">
+                <i class="fa fa-chevron-left"></i> JOS lab4 Lapic与Intel多核系统
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="" />
+          <p class="site-author-name" itemprop="name"></p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lunzimaker" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/Tommy__Liu" target="_blank">
+                  
+                    <i class="fa fa-twitter"></i> Twitter
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/tommy-liu-23" target="_blank">
+                  
+                    <i class="fa fa-zhihu"></i> Zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+            <div class="links-of-blogroll-title">友链</div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.ivanyang.me" target="_blank">IvanYang</a>
+                </li>
+              
+            </ul>
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'tommylwp';
+      var disqus_identifier = '2016/09/25/MIT6.824 分布式系统 lab1/';
+      var disqus_title = '';
+      var disqus_url = 'http://lunzimaker.github.io/2016/09/25/MIT6.824 分布式系统 lab1/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
